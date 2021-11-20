@@ -36,11 +36,11 @@ with open("article.html", "r", encoding='utf-8') as f:
     article= f.read()
 
 examples=[ 
-    ['basketball.jpg','whole-body'],
     ['meeting.jpeg','whole-body'],
     ['crowd.jpg','pose'],
-    ['elon.png','whole-body'],
+    ['bill.png','whole-body'],
     ['billie.png','whole-body'],
+    ['basketball.jpg','whole-body'],
     ['india-vehicles.jpeg', 'vehicles'],
     ['russia-vehicles.jpg', 'vehicles'],
     ['paris-vehicles.jpg', 'vehicles'],
