@@ -4,7 +4,7 @@ import gradio as gr
 import openpifpaf
 import numpy as np
 
-predictor_pose = openpifpaf.Predictor(checkpoint='shufflenetv2k30')
+predictor_pose = openpifpaf.Predictor(checkpoint='shufflenetv2k16')
 predictor_whole_body = openpifpaf.Predictor(checkpoint='shufflenetv2k30-wholebody')
 predictor_vehicle = openpifpaf.Predictor(checkpoint='shufflenetv2k16-apollo-24')
 
@@ -29,7 +29,7 @@ def inference(img, ver):
       
   
 title = "Openpifpaf"
-description = "Gradio demo for openpifpaf. To use it, simply upload your image, or click one of the examples to load them. Read more at the links below. Please use a cropped portrait picture for best results similar to the examples below"
+description = "Gradio demo for openpifpaf. To use it, simply upload your image, or click one of the examples to load them. Read more at the links below and don't hesitate to SMASH THAT LIKE BUTTON (wait, wrong platform)"
 article = "<p style='text-align: center'><a href='https://github.com/openpifpaf/openpifpaf' target='_blank'>Github Repo Openpifpaf</a> | <a href='https://github.com/peterbonnesoeur' target='_blank'>Github Repo peterbonnesoeur</a></p>"
 
 with open("article.html", "r", encoding='utf-8') as f:
