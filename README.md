@@ -1,6 +1,6 @@
 ---
 title: Pose_demo
-emoji: 🏢
+emoji: 🧑‍💻
 colorFrom: blue
 colorTo: indigo
 sdk: gradio

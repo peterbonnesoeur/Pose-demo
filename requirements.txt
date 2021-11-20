@@ -1,0 +1,9 @@
+gradio
+openpifpaf
+Pillow
+gdown
+numpy
+scipy
+cmake
+openpifpaf
+opencv-python-headless
