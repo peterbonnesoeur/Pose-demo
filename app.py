@@ -24,7 +24,7 @@ def inference(img, ver, white_overlay):
     return "out.jpg"
       
   
-title = "Openpifpaf - pose estimation"
+title = "Openpifpaf - pose estimation for human, vehicles and animals"
 description = "Gradio demo for openpifpaf. To use it, simply upload your image, or click one of the examples to load them. Read more at the links below and don't hesitate to SMASH THAT LIKE BUTTON (and you do not have a dislike there either so...)"
 article = "<p style='text-align: center'><a href='https://github.com/openpifpaf/openpifpaf' target='_blank'>Github Repo Openpifpaf</a> | <a href='https://github.com/peterbonnesoeur' target='_blank'>Github Repo peterbonnesoeur</a></p>"
 
