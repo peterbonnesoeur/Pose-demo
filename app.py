@@ -1,49 +1,61 @@
-from PIL import Image
-import torch
+import os
 import gradio as gr
-import openpifpaf
-import numpy as np
 
-predictor_pose = openpifpaf.Predictor(checkpoint='shufflenetv2k16')
-predictor_whole_body = openpifpaf.Predictor(checkpoint='shufflenetv2k30-wholebody')
-predictor_vehicle = openpifpaf.Predictor(checkpoint='shufflenetv2k16-apollo-24')
+def inference(img, ver, white_overlay):
 
+    if white_overlay:
+        white_overlay = "--white-overlay=0.3"
+    else:
+        white_overlay = ""
 
-def inference(img, ver):
     if ver == 'pose':
-        predictor = predictor_pose
+        os.system("python -m openpifpaf.predict "+img.name+" --checkpoint=shufflenetv2k30 --line-width=4 " + white_overlay + " -o out.jpg")
     elif ver == 'whole-body':
-        predictor = predictor_whole_body
+        os.system("python -m openpifpaf.predict "+img.name+" --checkpoint=shufflenetv2k30-wholebody --instance-threshold 0.05 " + white_overlay + " --seed-threshold 0.05 \
+                                                             --line-width 3 -o out.jpg")
     elif ver == 'vehicles':
-        predictor = predictor_vehicle
+        os.system("python -m openpifpaf.predict "+img.name+" --checkpoint=shufflenetv2k16-apollo-24 --line-width=5  " + white_overlay + " -o out.jpg")
+    elif ver == 'animal':
+        os.system("python -m openpifpaf.predict "+img.name+" --checkpoint=shufflenetv2k30-animalpose --line-width=5 --font-size=6 " + white_overlay + " \
+                   --long-edge=500  -o out.jpg")
     else:
         raise ValueError('invalid version')
 
-    predictions, gt_anns, image_meta = predictor.pil_image(img)
-    annotation_painter = openpifpaf.show.AnnotationPainter()
-    with openpifpaf.show.image_canvas(img, fig_file = "test.jpg") as ax:
-        annotation_painter.annotations(ax, predictions)
-
-    out = Image.open("test.jpg")
-    return out
+    return "out.jpg"
       
   
-title = "Openpifpaf"
-description = "Gradio demo for openpifpaf. To use it, simply upload your image, or click one of the examples to load them. Read more at the links below and don't hesitate to SMASH THAT LIKE BUTTON (wait, wrong platform)"
+title = "Openpifpaf - pose estimation"
+description = "Gradio demo for openpifpaf. To use it, simply upload your image, or click one of the examples to load them. Read more at the links below and don't hesitate to SMASH THAT LIKE BUTTON (and you do not have a dislike there either so...)"
 article = "<p style='text-align: center'><a href='https://github.com/openpifpaf/openpifpaf' target='_blank'>Github Repo Openpifpaf</a> | <a href='https://github.com/peterbonnesoeur' target='_blank'>Github Repo peterbonnesoeur</a></p>"
 
 with open("article.html", "r", encoding='utf-8') as f:
     article= f.read()
 
 examples=[ 
-    ['meeting.jpeg','whole-body'],
-    ['crowd.jpg','pose'],
+    ['basketball.jpg','whole-body'],
     ['bill.png','whole-body'],
     ['billie.png','whole-body'],
-    ['basketball.jpg','whole-body'],
+    ['meeting.jpeg','pose'],
+    ['crowd.jpg','pose'],
+    ['dalmatian.jpg', 'animal'],
+    ['tappo_loomo.jpg', 'animal'],
+    ['cow.jpg', 'animal'],
     ['india-vehicles.jpeg', 'vehicles'],
     ['russia-vehicles.jpg', 'vehicles'],
     ['paris-vehicles.jpg', 'vehicles'],
+
     ]
-gr.Interface(inference, [gr.inputs.Image(type="pil"),gr.inputs.Radio(['pose', 'whole-body', 'vehicles'], type="value", default='pose', label='version')
-], gr.outputs.Image(type="pil"),title=title,description=description,article=article,enable_queue=True,examples=examples).launch()
+
+gr.Interface(
+    inference,
+    [
+        gr.inputs.Image(type="file", label="Input"),
+        gr.inputs.Radio(['whole-body', 'pose', 'vehicles', 'animal'], type="value", default='whole-body', label='version'),
+        gr.inputs.Checkbox(default=False, label="White overlay")
+    ],
+    gr.outputs.Image(type="file", label="Output"),
+    title=title,
+    description=description,
+    article=article,
+    enable_queue=True,
+    examples=examples).launch()
